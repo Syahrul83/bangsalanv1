@@ -1,7 +1,10 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import PaymentTable from "@/components/PaymentTable";
 
 export default async function LaporanPage() {
+
   const allRooms = await prisma.room.findMany({
     include: { tenant: true },
     orderBy: { number: "asc" },
@@ -33,22 +36,27 @@ export default async function LaporanPage() {
           <p className="text-sm">Total Kamar</p>
           <p className="text-3xl font-bold">{totalKamar}</p>
         </div>
+
         <div className="bg-green-100 p-4 rounded shadow">
           <p className="text-sm">Kamar Terisi</p>
           <p className="text-3xl font-bold">{kamarTerisi}</p>
         </div>
+
         <div className="bg-gray-100 p-4 rounded shadow">
           <p className="text-sm">Kamar Kosong</p>
           <p className="text-3xl font-bold">{kamarKosong.length}</p>
         </div>
+
         <div className="bg-yellow-100 p-4 rounded shadow">
           <p className="text-sm">Total Pembayaran</p>
           <p className="text-3xl font-bold">{totalPembayaran}</p>
         </div>
+
         <div className="bg-green-100 p-4 rounded shadow">
           <p className="text-sm">Lunas</p>
           <p className="text-3xl font-bold">{pembayaranLunas}</p>
         </div>
+
         <div className="bg-red-100 p-4 rounded shadow">
           <p className="text-sm">Belum Lunas</p>
           <p className="text-3xl font-bold">{pembayaranBelum}</p>
@@ -56,11 +64,14 @@ export default async function LaporanPage() {
       </div>
 
       <div className="bg-white p-4 rounded shadow mb-6">
-        <p className="text-lg font-semibold">Total Pendapatan (Lunas): Rp {totalPendapatan.toLocaleString()}</p>
+        <p className="text-lg font-semibold">
+          Total Pendapatan (Lunas): Rp {totalPendapatan.toLocaleString()}
+        </p>
       </div>
 
       <div className="mb-6">
         <h2 className="text-xl font-bold mb-2">Kamar Kosong</h2>
+
         {kamarKosong.length === 0 ? (
           <p className="text-gray-500">Semua kamar terisi</p>
         ) : (
@@ -74,7 +85,7 @@ export default async function LaporanPage() {
         )}
       </div>
 
-<div>
+      <div>
         <h2 className="text-xl font-bold mb-2">Riwayat Pembayaran</h2>
         <PaymentTable payments={payments} />
       </div>
