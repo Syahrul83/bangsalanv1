@@ -2,18 +2,14 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Room, Tenant } from "@prisma/client";
 
-// bikin tipe Room + Tenant
 type KamarWithTenant = Room & { tenant: Tenant | null };
 
-export async function getServerSideProps() {
-  const kamar = await prisma.room.findMany({
+export default async function KamarPage() {
+  const kamar: KamarWithTenant[] = await prisma.room.findMany({
     include: { tenant: true },
     orderBy: { number: "asc" },
   });
-  return { props: { kamar } };
-}
 
-export default function KamarPage({ kamar }: { kamar: KamarWithTenant[] }) {
   async function handleDelete(formData: FormData) {
     "use server";
     const id = parseInt(formData.get("id") as string);
@@ -43,7 +39,7 @@ export default function KamarPage({ kamar }: { kamar: KamarWithTenant[] }) {
             </tr>
           </thead>
           <tbody>
-            {kamar.map((k: KamarWithTenant) => (
+            {kamar.map((k) => (
               <tr key={k.id} className="border-t">
                 <td className="p-2">{k.number}</td>
                 <td className="p-2">Rp {k.price.toLocaleString()}</td>
