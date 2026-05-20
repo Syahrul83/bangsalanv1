@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "sqlite"
+//   url      = "file:./dev.db"
+// }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  name     String
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  number    String   @unique
+  price     Float
+  status    String   @default("Kosong")
+  tenant    Tenant?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tenant {
+  id        Int       @id @default(autoincrement())
+  name      String
+  phone     String
+  entryDate DateTime
+  roomId    Int       @unique
+  room      Room      @relation(fields: [roomId], references: [id])
+  payments  Payment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  tenantId  Int
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  month     String
+  amount    Float
+  status    String   @default("Belum Lunas")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

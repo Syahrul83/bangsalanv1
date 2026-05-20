@@ -1,0 +1,1 @@
+$portProcess = Get-NetTCPConnection -LocalPort 3010 -ErrorAction SilentlyContinue; if ($portProcess) { Stop-Process -Id $portProcess.OwningProcess -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2 }; Start-Process powershell -WorkingDirectory "C:\laragon\www\bangsalan" -ArgumentList "npx next dev --port 3010"
